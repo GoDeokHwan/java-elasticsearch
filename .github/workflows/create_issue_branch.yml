@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Issue Branch
-        uses: GoDeokHwan/java-elasticsearch@develop
+        uses: GoDeokHwan/java-elasticsearch@develop/.github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Echo Branch Name
