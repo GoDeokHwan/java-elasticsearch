@@ -3,4 +3,4 @@ branches:
   - label: '*'
     prefix: feature/
 autoCloseIssue: true
-    
+defaultBranch: develop    
