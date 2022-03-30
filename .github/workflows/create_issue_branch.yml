@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Create Issue Branch
         id: Create_Issue_Branch
-        uses: GoDeokHwan/java-elasticsearch@master/workflows
+        uses: robvanderleek/create-issue-branch@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Echo Branch Name
