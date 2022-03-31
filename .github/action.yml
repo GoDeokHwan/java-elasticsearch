@@ -1,5 +1,6 @@
-branchName: '${issue.number}'
+branchName: tiny
 autoCloseIssue: true
+commentMessage: 'Branch ${branchName} created for issue: ${issue.number}'
 branches:
   - label: dev
     prefix: feature/
