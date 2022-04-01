@@ -11,6 +11,9 @@ branches:
   - label: hotfix
     prefix: hotfix/
     name: master
+  - label: release
+    prefix: release
+    name: develop
   - label: '*'
     prefix: feature/
     name: develop
