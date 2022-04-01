@@ -1,4 +1,4 @@
-branchName: tiny
+branchName: ${issue.title}
 autoCloseIssue: true
 commentMessage: 'Branch ${branchName} created for issue: ${issue.title}'
 branches:
