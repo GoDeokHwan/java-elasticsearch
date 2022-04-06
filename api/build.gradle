@@ -1,0 +1,27 @@
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+dependencies {
+    implementation project(path: ":elastic", configuration: "default")
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+jar {
+    archivesBaseName = 'java-elasticsearch'
+    archiveVersion = '1.0-SNAPSHOT'
+
+}
+compileJava.dependsOn(processResources)
+
+test {
+    exclude '**/*'
+}
+
+task prepareKotlinBuildScriptModel {
+
+}
