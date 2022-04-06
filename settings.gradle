@@ -1,0 +1,3 @@
+rootProject.name = 'java-elasticsearch'
+include 'api'
+include 'elastic'
