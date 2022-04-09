@@ -1,1 +1,11 @@
-
+# JPA
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:13306/elasticdb?serverTimezone=Asia/Seoul
