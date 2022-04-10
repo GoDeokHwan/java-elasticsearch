@@ -1,1 +1,23 @@
+# JPA
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:13306/elasticdb?serverTimezone=Asia/Seoul
 
+# http
+http:
+  readTimeout: 10000
+  connectTimeout: 3000
+  maxTotal: 1000
+  defaultMaxPerRoute: 1000
+
+thread:
+  corePoolSize: 3
+  maxPoolSize: 30
+  queueCapacity: 10
