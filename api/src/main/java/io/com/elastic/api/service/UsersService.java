@@ -4,4 +4,6 @@ import io.com.elastic.api.dto.UsersDTO;
 
 public interface UsersService {
     void createUser(UsersDTO usersDTO);
+
+    void modify(Long id, UsersDTO request);
 }

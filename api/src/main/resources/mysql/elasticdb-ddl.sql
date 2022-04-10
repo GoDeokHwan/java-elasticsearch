@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `elasticdb`.`users` (
     `email` VARCHAR(45) NULL,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
-
+ALTER TABLE `elasticdb`.`users` convert to character set utf8;
 
 -- -----------------------------------------------------
 -- Table `elasticdb`.`boards`
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `elasticdb`.`boards` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
-
+ALTER TABLE `elasticdb`.`boards` convert to character set utf8;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
