@@ -1,0 +1,147 @@
+PUT boards-v0.1
+{
+  "settings": {
+    "index" : {
+      "analysis" : {
+        "analyzer" : {
+          "twc_cjk_analyzer" : {
+            "tokenizer" : "twc_cjk_tokenizer"
+          }
+        },
+        "tokenizer" : {
+          "twc_cjk_tokenizer" : {
+            "token_chars" : [
+              "letter",
+              "digit"
+            ],
+            "min_gram" : "1",
+            "type" : "ngram",
+            "max_gram" : "5"
+          }
+        }
+      },
+      "max_ngram_diff" : "5"
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "contents": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "users": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "text"
+          },
+          "email": {
+            "type": "text"
+          }
+        }
+      },
+      "createDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "modifyDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "lastIndexedTimeStamp": {
+        "type": "long"
+      }
+    }
+  }
+}
+
+PUT _template/boards
+{
+  "order":1,
+  "index_patterns":[
+    "board-*"
+  ],
+  "settings": {
+    "index" : {
+      "analysis" : {
+        "analyzer" : {
+          "twc_cjk_analyzer" : {
+            "tokenizer" : "twc_cjk_tokenizer"
+          }
+        },
+        "tokenizer" : {
+          "twc_cjk_tokenizer" : {
+            "token_chars" : [
+              "letter",
+              "digit"
+            ],
+            "min_gram" : "1",
+            "type" : "ngram",
+            "max_gram" : "5"
+          }
+        }
+      },
+      "max_ngram_diff" : "5"
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "contents": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "users": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "text"
+          },
+          "email": {
+            "type": "text"
+          }
+        }
+      },
+      "createDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "modifyDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "lastIndexedTimeStamp": {
+        "type": "long"
+      }
+    }
+  }
+}
+
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "boards-v0.1",
+        "alias": "boards"
+      }
+    }
+  ]
+}
