@@ -2,11 +2,14 @@ package io.com.elastic.api.service.impl;
 
 import io.com.elastic.api.dto.BoardsDTO;
 import io.com.elastic.api.entity.Boards;
+import io.com.elastic.api.event.BoardsCreateEvent;
 import io.com.elastic.api.repository.BoardsRepository;
 import io.com.elastic.api.repository.UsersRepository;
 import io.com.elastic.api.service.BoardsService;
 import io.com.elastic.api.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +22,14 @@ import java.util.Optional;
 public class BoardsServiceImpl implements BoardsService {
     private final BoardsRepository boardsRepository;
     private final UsersRepository usersRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public void createBoards(BoardsDTO boardsDTO) {
         Boards boards = boardsDTO.convertBoards();
         boards.ofUsers(usersRepository.getById(boardsDTO.getUsers().getId()));
         boardsRepository.save(boards);
+        publisher.publishEvent(new BoardsCreateEvent(boards));
     }
 
     @Override
