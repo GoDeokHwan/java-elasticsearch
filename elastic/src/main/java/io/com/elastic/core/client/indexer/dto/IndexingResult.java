@@ -1,4 +1,4 @@
-package io.com.elastic.client.indexer.dto;
+package io.com.elastic.core.client.indexer.dto;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

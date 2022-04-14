@@ -1,14 +1,13 @@
-package io.com.elastic.client.indexer.impl;
+package io.com.elastic.core.client.indexer.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.com.elastic.client.indexer.BoardsIndexer;
-import io.com.elastic.client.indexer.dto.BoardsUpdateType;
-import io.com.elastic.client.indexer.dto.IndexingResult;
-import io.com.elastic.client.worker.impl.ElasticSearchWorkerImpl;
-import io.com.elastic.config.binder.DataEsProperties;
-import io.com.elastic.entity.boards.Boards;
-import lombok.RequiredArgsConstructor;
+import io.com.elastic.core.client.indexer.BoardsIndexer;
+import io.com.elastic.core.client.indexer.dto.BoardsUpdateType;
+import io.com.elastic.core.client.indexer.dto.IndexingResult;
+import io.com.elastic.core.client.worker.impl.ElasticSearchWorkerImpl;
+import io.com.elastic.core.config.binder.DataEsProperties;
+import io.com.elastic.core.entity.Boards;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -60,6 +59,7 @@ public class BoardsIndexerImpl extends ElasticSearchWorkerImpl implements Boards
     private IndexRequest getIndexRequest(Object object) throws JsonProcessingException {
         IndexRequest request = new IndexRequest(properties.getBoardsIndexName());
         request.source(objectMapper.writeValueAsString(object), XContentType.JSON);
+        log.info("[{}] = {}", BoardsUpdateType.UPDATE_BOARDS, objectMapper.writeValueAsString(object));
         return request;
     }
 

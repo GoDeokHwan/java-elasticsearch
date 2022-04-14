@@ -1,4 +1,4 @@
-package io.com.elastic.service.dto.common;
+package io.com.elastic.core.service.dto.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

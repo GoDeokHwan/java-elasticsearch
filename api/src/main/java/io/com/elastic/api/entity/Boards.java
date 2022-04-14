@@ -45,14 +45,14 @@ public class Boards {
         return BoardsDTO.of(id, title, comment, createDate, modifyDate, users.convertUsersDTO());
     }
 
-    public io.com.elastic.entity.boards.Boards convertToESBoards() {
-        io.com.elastic.entity.boards.Boards instance = new io.com.elastic.entity.boards.Boards();
+    public io.com.elastic.core.entity.Boards convertToESBoards() {
+        io.com.elastic.core.entity.Boards instance = new io.com.elastic.core.entity.Boards();
         instance.setId(this.getId());
         instance.setTitle(this.getTitle());
         instance.setComment(this.getComment());
         instance.setCreateDate(this.getCreateDate());
         instance.setModifyDate(this.getModifyDate());
-        instance.setUsers(io.com.elastic.entity.boards.Users.of(this.getUsers().getId(), this.getUsers().getName(), this.getUsers().getEmail()));
+        instance.setUsers(io.com.elastic.core.entity.Users.of(this.getUsers().getId(), this.getUsers().getName(), this.getUsers().getEmail()));
         return instance;
     }
 

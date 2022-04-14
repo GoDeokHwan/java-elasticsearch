@@ -1,8 +1,8 @@
-package io.com.elastic.client.worker.impl;
+package io.com.elastic.core.client.worker.impl;
 
 import com.google.common.io.Closeables;
-import io.com.elastic.client.worker.ElasticSearchWorker;
-import io.com.elastic.config.binder.DataEsProperties;
+import io.com.elastic.core.client.worker.ElasticSearchWorker;
+import io.com.elastic.core.config.binder.DataEsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.auth.AuthScope;
@@ -30,15 +30,15 @@ public class ElasticSearchWorkerImpl implements ElasticSearchWorker {
     public RestHighLevelClient getHighLevelClient() throws UnknownHostException {
         RestHighLevelClient restHighLevelClient = new RestHighLevelClient(
                 RestClient.builder(
-                        dataEsProperties.getHosts()
+                        dataEsProperties.getDefaultHttpHost()
                 ).setHttpClientConfigCallback(httpClientBuilder -> {
-                    httpClientBuilder.setMaxConnTotal(dataEsProperties.getHttpClientProperties().getPooling().getMaxTotal());
-                    httpClientBuilder.setMaxConnPerRoute(dataEsProperties.getHttpClientProperties().getPooling().getDefaultMaxPerRoute());
+                    httpClientBuilder.setMaxConnTotal(dataEsProperties.getHttpclient().getPooling().getMaxTotal());
+                    httpClientBuilder.setMaxConnPerRoute(dataEsProperties.getHttpclient().getPooling().getDefaultMaxPerRoute());
                     httpClientBuilder.setDefaultCredentialsProvider(getDefaultCredentialProvider());
                     return httpClientBuilder;
                 }).setRequestConfigCallback(requestConfigBuilder -> requestConfigBuilder
-                        .setConnectTimeout(dataEsProperties.getHttpClientProperties().getDefaultConnectionTimeout())
-                        .setSocketTimeout(dataEsProperties.getHttpClientProperties().getDefaultReadTimeout())
+                        .setConnectTimeout(dataEsProperties.getHttpclient().getDefaultConnectionTimeout())
+                        .setSocketTimeout(dataEsProperties.getHttpclient().getDefaultReadTimeout())
                 )
         );
         return restHighLevelClient;

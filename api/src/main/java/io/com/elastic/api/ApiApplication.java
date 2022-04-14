@@ -8,7 +8,8 @@ import org.springframework.cache.annotation.EnableCaching;
 @ConfigurationPropertiesScan("io.com.elastic")
 @EnableCaching(proxyTargetClass = true)
 @SpringBootApplication(scanBasePackages = {
-        "io.com.elastic"
+        "io.com.elastic.api"
+        , "io.com.elastic.core"
 })
 public class ApiApplication {
 

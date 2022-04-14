@@ -54,8 +54,8 @@ project(':elastic') {
 }
 
 project(':api') {
-    bootJar { enabled = true }
-    jar { enabled = false }
+    bootJar { enabled = false }
+    jar { enabled = true }
 
     dependencies {
         implementation project(':elastic')

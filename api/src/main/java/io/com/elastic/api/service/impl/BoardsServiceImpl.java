@@ -7,6 +7,10 @@ import io.com.elastic.api.repository.BoardsRepository;
 import io.com.elastic.api.repository.UsersRepository;
 import io.com.elastic.api.service.BoardsService;
 import io.com.elastic.api.service.UsersService;
+import io.com.elastic.core.service.BoardsIndexerService;
+import io.com.elastic.core.service.dto.common.DataChangeType;
+import io.com.elastic.core.service.dto.common.IndexingMessage;
+import io.com.elastic.core.service.dto.common.IndexingType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,13 +27,15 @@ public class BoardsServiceImpl implements BoardsService {
     private final BoardsRepository boardsRepository;
     private final UsersRepository usersRepository;
     private final ApplicationEventPublisher publisher;
+    private final BoardsIndexerService boardsIndexerService;
 
     @Override
     public void createBoards(BoardsDTO boardsDTO) {
         Boards boards = boardsDTO.convertBoards();
         boards.ofUsers(usersRepository.getById(boardsDTO.getUsers().getId()));
         boardsRepository.save(boards);
-        publisher.publishEvent(new BoardsCreateEvent(boards));
+        boardsIndexerService.asyncProcessIndexingData(boards.convertToESBoards(), IndexingMessage.of(IndexingType.BOARDS, DataChangeType.CREATE, boards.convertToESBoards()), System.currentTimeMillis());
+//        publisher.publishEvent(new BoardsCreateEvent(boards));
     }
 
     @Override

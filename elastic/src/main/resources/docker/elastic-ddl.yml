@@ -1,3 +1,4 @@
+DELETE boards-v0.1
 PUT boards-v0.1
 {
   "settings": {
@@ -51,11 +52,11 @@ PUT boards-v0.1
       },
       "createDate": {
         "type": "date",
-        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
       },
       "modifyDate": {
         "type": "date",
-        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
       },
       "lastIndexedTimeStamp": {
         "type": "long"
@@ -64,6 +65,7 @@ PUT boards-v0.1
   }
 }
 
+DELETE _template/boards
 PUT _template/boards
 {
   "order":1,
@@ -121,11 +123,11 @@ PUT _template/boards
       },
       "createDate": {
         "type": "date",
-        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
       },
       "modifyDate": {
         "type": "date",
-        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
       },
       "lastIndexedTimeStamp": {
         "type": "long"

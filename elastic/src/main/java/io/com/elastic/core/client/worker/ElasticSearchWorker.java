@@ -1,4 +1,4 @@
-package io.com.elastic.client.worker;
+package io.com.elastic.core.client.worker;
 
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;

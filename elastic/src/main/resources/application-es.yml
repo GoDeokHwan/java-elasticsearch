@@ -6,9 +6,8 @@ data-es:
   elasticCloudPW: 5aW9BFfmhrmECwFB2EX9AkP9
   indecies:
     boardsIndexName: boards
-
-data-es.httpclient:
-  pooling.maxTotal: 50
-  pooling.defaultMaxPerRoute: 25
-  defaultReadTimeout: 2500
-  defaultConnectionTimeout: 1500
+  httpclient:
+    pooling.maxTotal: 50
+    pooling.defaultMaxPerRoute: 25
+    defaultReadTimeout: 2500
+    defaultConnectionTimeout: 1500

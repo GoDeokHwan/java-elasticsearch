@@ -1,13 +1,13 @@
-package io.com.elastic.service.impl;
+package io.com.elastic.core.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.com.elastic.client.indexer.BoardsIndexer;
-import io.com.elastic.client.indexer.dto.BoardsUpdateType;
-import io.com.elastic.client.indexer.dto.IndexingResult;
-import io.com.elastic.entity.boards.Boards;
-import io.com.elastic.service.BoardsService;
-import io.com.elastic.service.dto.common.IndexingMessage;
-import io.com.elastic.service.dto.common.IndexingType;
+import io.com.elastic.core.client.indexer.BoardsIndexer;
+import io.com.elastic.core.client.indexer.dto.BoardsUpdateType;
+import io.com.elastic.core.client.indexer.dto.IndexingResult;
+import io.com.elastic.core.service.BoardsIndexerService;
+import io.com.elastic.core.service.dto.common.IndexingMessage;
+import io.com.elastic.core.entity.Boards;
+import io.com.elastic.core.service.dto.common.IndexingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteRequest;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BoardsServiceImpl implements BoardsService {
+public class BoardsIndexerServiceImpl implements BoardsIndexerService {
 
     private final BoardsIndexer boardsIndexer;
     private final ObjectMapper objectMapper;

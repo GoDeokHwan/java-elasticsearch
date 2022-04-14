@@ -20,11 +20,14 @@ dependencies {
     testImplementation "org.assertj:assertj-core:3.11.0"
 }
 
+bootJar {
+    enabled = false
+}
 
 jar {
     archivesBaseName = 'java-elasticsearch'
     archiveVersion = '1.0-SNAPSHOT'
-
+    enabled = true
 }
 compileJava.dependsOn(processResources)
 

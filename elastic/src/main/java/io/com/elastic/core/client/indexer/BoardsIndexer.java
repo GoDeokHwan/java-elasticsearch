@@ -1,8 +1,8 @@
-package io.com.elastic.client.indexer;
+package io.com.elastic.core.client.indexer;
 
-import io.com.elastic.client.indexer.dto.BoardsUpdateType;
-import io.com.elastic.client.indexer.dto.IndexingResult;
-import io.com.elastic.entity.boards.Boards;
+import io.com.elastic.core.client.indexer.dto.BoardsUpdateType;
+import io.com.elastic.core.client.indexer.dto.IndexingResult;
+import io.com.elastic.core.entity.Boards;
 import org.elasticsearch.action.DocWriteRequest;
 
 import java.io.IOException;
