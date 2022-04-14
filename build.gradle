@@ -46,16 +46,16 @@ subprojects {
 }
 
 project(':elastic') {
-    bootJar { enabled = false }
-    jar { enabled = true }
+    bootJar { enabled = true }
+    jar { enabled = false }
 
     dependencies {
     }
 }
 
 project(':api') {
-    bootJar { enabled = true }
-    jar { enabled = false }
+    bootJar { enabled = false }
+    jar { enabled = true }
 
     dependencies {
         implementation project(':elastic')
