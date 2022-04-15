@@ -28,7 +28,6 @@ public class BoardsServiceImpl implements BoardsService {
     private final BoardsRepository boardsRepository;
     private final UsersRepository usersRepository;
     private final ApplicationEventPublisher publisher;
-    private final BoardsIndexerService boardsIndexerService;
 
     @Override
     public void createBoards(BoardsDTO boardsDTO) {
@@ -47,9 +46,6 @@ public class BoardsServiceImpl implements BoardsService {
     public void modify(Long id, BoardsDTO boardsDTO) {
         Boards boards = boardsRepository.getById(id);
         boards.changeBoards(boardsDTO);
-//        boardsIndexerService.asyncProcessIndexingData(boards.convertToESBoards()
-//                , IndexingMessage.of(IndexingType.BOARDS, DataChangeType.UPDATE, boards.convertToESBoards())
-//                , System.currentTimeMillis());
         publisher.publishEvent(new BoardsModifyEvent(boards));
     }
 

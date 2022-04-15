@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum BoardsUpdateType {
-    UPDATE_BOARDS("update-boards");
+    UPDATE_BOARDS("update-boards")
+    ;
 
     private final String scriptName;
 
