@@ -3,6 +3,7 @@ package io.com.elastic.api.service.impl;
 import io.com.elastic.api.dto.BoardsDTO;
 import io.com.elastic.api.entity.Boards;
 import io.com.elastic.api.event.BoardsCreateEvent;
+import io.com.elastic.api.event.BoardsModifyEvent;
 import io.com.elastic.api.repository.BoardsRepository;
 import io.com.elastic.api.repository.UsersRepository;
 import io.com.elastic.api.service.BoardsService;
@@ -34,8 +35,7 @@ public class BoardsServiceImpl implements BoardsService {
         Boards boards = boardsDTO.convertBoards();
         boards.ofUsers(usersRepository.getById(boardsDTO.getUsers().getId()));
         boardsRepository.save(boards);
-        boardsIndexerService.asyncProcessIndexingData(boards.convertToESBoards(), IndexingMessage.of(IndexingType.BOARDS, DataChangeType.CREATE, boards.convertToESBoards()), System.currentTimeMillis());
-//        publisher.publishEvent(new BoardsCreateEvent(boards));
+        publisher.publishEvent(new BoardsCreateEvent(boards));
     }
 
     @Override
@@ -47,7 +47,12 @@ public class BoardsServiceImpl implements BoardsService {
     public void modify(Long id, BoardsDTO boardsDTO) {
         Boards boards = boardsRepository.getById(id);
         boards.changeBoards(boardsDTO);
+//        boardsIndexerService.asyncProcessIndexingData(boards.convertToESBoards()
+//                , IndexingMessage.of(IndexingType.BOARDS, DataChangeType.UPDATE, boards.convertToESBoards())
+//                , System.currentTimeMillis());
+        publisher.publishEvent(new BoardsModifyEvent(boards));
     }
+
 
     @Override
     public BoardsDTO get(Long id) {

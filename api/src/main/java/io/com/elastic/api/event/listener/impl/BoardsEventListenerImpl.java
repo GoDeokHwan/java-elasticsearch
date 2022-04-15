@@ -2,6 +2,7 @@ package io.com.elastic.api.event.listener.impl;
 
 import io.com.elastic.api.entity.Boards;
 import io.com.elastic.api.event.BoardsCreateEvent;
+import io.com.elastic.api.event.BoardsModifyEvent;
 import io.com.elastic.api.event.listener.BoardsEventListener;
 import io.com.elastic.core.service.BoardsIndexerService;
 import io.com.elastic.core.service.dto.common.DataChangeType;
@@ -15,12 +16,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BoardsEventListenerImpl implements BoardsEventListener {
 
-    private final BoardsIndexerService boardsService;
+    private final BoardsIndexerService boardsIndexerService;
 
     @Override
     public void handleBoardsCreateEvent(BoardsCreateEvent event) {
         event.getBoards().map(Boards::convertToESBoards).ifPresent(b -> {
-            boardsService.asyncProcessIndexingData(b, IndexingMessage.of(IndexingType.BOARDS, DataChangeType.CREATE, b), System.currentTimeMillis());
+            boardsIndexerService.asyncProcessIndexingData(b, IndexingMessage.of(IndexingType.BOARDS, DataChangeType.CREATE, b), System.currentTimeMillis());
+        });
+    }
+
+    @Override
+    public void handleBoardsModifyEvent(BoardsModifyEvent event) {
+        event.getBoards().map(Boards::convertToESBoards).ifPresent(b -> {
+            boardsIndexerService.asyncProcessIndexingData(b, IndexingMessage.of(IndexingType.BOARDS, DataChangeType.UPDATE, b), System.currentTimeMillis());
         });
     }
 }
