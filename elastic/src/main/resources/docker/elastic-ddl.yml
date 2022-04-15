@@ -147,3 +147,19 @@ POST _aliases
     }
   ]
 }
+
+PUT _scripts/update-boards
+{
+  "script": {
+    "lang": "painless",
+    "source": """
+          if (ctx._source.lastIndexedTimeStamp == null || ctx._source.lastIndexedTimeStamp < params.lastIndexedTimeStamp) {
+      ctx._source.title = params.title;
+      ctx._source.comment = params.comment;
+      ctx._source.users = params.users;
+      ctx._source.modifyDate = params.modifyDate;
+      ctx._source.lastIndexedTimeStamp = params.lastIndexedTimeStamp;
+      }
+  """
+  }
+}
