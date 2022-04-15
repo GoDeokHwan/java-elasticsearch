@@ -1,0 +1,165 @@
+DELETE boards-v0.1
+PUT boards-v0.1
+{
+  "settings": {
+    "index" : {
+      "analysis" : {
+        "analyzer" : {
+          "twc_cjk_analyzer" : {
+            "tokenizer" : "twc_cjk_tokenizer"
+          }
+        },
+        "tokenizer" : {
+          "twc_cjk_tokenizer" : {
+            "token_chars" : [
+              "letter",
+              "digit"
+            ],
+            "min_gram" : "1",
+            "type" : "ngram",
+            "max_gram" : "5"
+          }
+        }
+      },
+      "max_ngram_diff" : "5"
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "contents": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "users": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "text"
+          },
+          "email": {
+            "type": "text"
+          }
+        }
+      },
+      "createDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "modifyDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "lastIndexedTimeStamp": {
+        "type": "long"
+      }
+    }
+  }
+}
+
+DELETE _template/boards
+PUT _template/boards
+{
+  "order":1,
+  "index_patterns":[
+    "board-*"
+  ],
+  "settings": {
+    "index" : {
+      "analysis" : {
+        "analyzer" : {
+          "twc_cjk_analyzer" : {
+            "tokenizer" : "twc_cjk_tokenizer"
+          }
+        },
+        "tokenizer" : {
+          "twc_cjk_tokenizer" : {
+            "token_chars" : [
+              "letter",
+              "digit"
+            ],
+            "min_gram" : "1",
+            "type" : "ngram",
+            "max_gram" : "5"
+          }
+        }
+      },
+      "max_ngram_diff" : "5"
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "contents": {
+        "type": "text",
+        "analyzer": "twc_cjk_analyzer"
+      },
+      "users": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "text"
+          },
+          "email": {
+            "type": "text"
+          }
+        }
+      },
+      "createDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "modifyDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ||yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "lastIndexedTimeStamp": {
+        "type": "long"
+      }
+    }
+  }
+}
+
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "boards-v0.1",
+        "alias": "boards"
+      }
+    }
+  ]
+}
+
+PUT _scripts/update-boards
+{
+  "script": {
+    "lang": "painless",
+    "source": """
+          if (ctx._source.lastIndexedTimeStamp == null || ctx._source.lastIndexedTimeStamp < params.lastIndexedTimeStamp) {
+      ctx._source.title = params.title;
+      ctx._source.comment = params.comment;
+      ctx._source.users = params.users;
+      ctx._source.modifyDate = params.modifyDate;
+      ctx._source.lastIndexedTimeStamp = params.lastIndexedTimeStamp;
+      }
+  """
+  }
+}

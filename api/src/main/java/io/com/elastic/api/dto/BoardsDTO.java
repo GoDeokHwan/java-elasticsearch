@@ -16,7 +16,7 @@ public class BoardsDTO {
     protected String comment;
     protected LocalDateTime createDate;
     protected LocalDateTime modifyDate;
-    protected Long usersId;
+    protected UsersDTO users;
 
     public Boards convertBoards() {
         Boards instance = new Boards();

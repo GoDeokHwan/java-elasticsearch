@@ -1,0 +1,13 @@
+data-es:
+  hosts: localhost
+  port: 1604
+  indexPostfix: local
+  elasticCloudId: elastic
+  elasticCloudPW: 5aW9BFfmhrmECwFB2EX9AkP9
+  indecies:
+    boardsIndexName: boards
+  httpclient:
+    pooling.maxTotal: 50
+    pooling.defaultMaxPerRoute: 25
+    defaultReadTimeout: 2500
+    defaultConnectionTimeout: 1500
