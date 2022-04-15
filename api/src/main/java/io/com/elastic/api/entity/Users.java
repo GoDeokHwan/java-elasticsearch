@@ -42,4 +42,10 @@ public class Users {
             this.email = usersDTO.getEmail();
         }
     }
+
+    public io.com.elastic.core.entity.Boards convertToEsBoards() {
+        io.com.elastic.core.entity.Boards instance = new io.com.elastic.core.entity.Boards();
+        instance.setUsers(io.com.elastic.core.entity.Users.of(this.getId(), this.getName(), this.getEmail()));
+        return instance;
+    }
 }

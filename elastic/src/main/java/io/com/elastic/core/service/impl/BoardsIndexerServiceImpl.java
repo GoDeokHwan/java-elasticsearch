@@ -56,6 +56,8 @@ public class BoardsIndexerServiceImpl implements BoardsIndexerService {
 
     private IndexingResult upsert(Boards boards, Long sentTimestamp, IndexingType indexingType) throws IOException {
         switch (indexingType) {
+            case BOARDS_QUERY:
+                return boardsIndexer.upsertByQuery(boards, sentTimestamp, BoardsUpdateType.UPDATE_BOARDS, "users.id", boards.getUsers().getId());
             default:
                 return boardsIndexer.upsert(boards, sentTimestamp, DocWriteRequest.OpType.UPDATE, BoardsUpdateType.UPDATE_BOARDS);
         }

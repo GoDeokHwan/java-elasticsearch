@@ -11,6 +11,7 @@ import io.com.elastic.core.entity.Boards;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.DocWriteRequest;
+import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.WriteRequest;
@@ -21,12 +22,17 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.bytes.BytesArray;
 import org.elasticsearch.common.xcontent.XContentHelper;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -104,7 +110,45 @@ public class BoardsIndexerImpl extends ElasticSearchWorkerImpl implements Boards
      * */
     @Override
     public IndexingResult upsertByQuery(Boards boards, Long indexingTimestamp, BoardsUpdateType boardsUpdateType, String queryFieldName, Object queryValue) throws IOException {
-        return null;
+        boards.setLastIndexedTimeStamp(indexingTimestamp);
+        RestHighLevelClient client = null;
+        BulkByScrollResponse updateByQueryResponse = null;
+        try {
+            client = getHighLevelClient();
+            UpdateByQueryRequest updateByQueryRequest = getProductUpsertByQueryRequest(boards, boardsUpdateType, queryFieldName, queryValue);
+            updateByQueryResponse = client.updateByQuery(updateByQueryRequest, RequestOptions.DEFAULT);
+        } catch (ConnectException e) {
+            log.warn("upsert Query ConnecException ", e);
+        } catch (IllegalArgumentException e) {
+            log.error("upsert IllegalArgumentException", e);
+            throw e;
+        } catch (IOException e) {
+            log.error("upsert Exception", e);
+            throw e;
+        } finally {
+            super.closeClient(client);
+        }
+
+        List<String> failedList = updateByQueryResponse.getBulkFailures().stream().map(BulkItemResponse.Failure::getId).collect(Collectors.toList());
+        List<String> failMessages = updateByQueryResponse.getBulkFailures().stream().map(BulkItemResponse.Failure::getMessage).collect(Collectors.toList());
+        return IndexingResult.of(String.join(" :: ", failMessages), failedList);
+    }
+
+    private UpdateByQueryRequest getProductUpsertByQueryRequest(Boards boards, BoardsUpdateType boardsUpdateType, String queryFieldName, Object queryValue) throws JsonProcessingException{
+        return getUpdateByQueryRequest(boards, boardsUpdateType.getScriptName(), queryFieldName, queryValue);
+    }
+
+    private UpdateByQueryRequest getUpdateByQueryRequest(Object object, String scriptName, String queryFieldName, Object queryValue) throws JsonProcessingException {
+        UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest(properties.getBoardsIndexName());
+        updateByQueryRequest.setConflicts("proceed");
+        updateByQueryRequest.setQuery(new TermQueryBuilder(queryFieldName, queryValue));
+        updateByQueryRequest.setScript(new Script(
+                ScriptType.STORED,
+                null,
+                scriptName,
+                XContentHelper.convertToMap(new BytesArray(objectMapper.writeValueAsString(object)), true, XContentType.JSON).v2()));
+        log.info("## Boards ## {} : {}", scriptName, objectMapper.writeValueAsString(object));
+        return updateByQueryRequest;
     }
 
     private UpdateRequest getProductUpsertRequest(Boards boards, BoardsUpdateType boardsUpdateType) throws JsonProcessingException {
