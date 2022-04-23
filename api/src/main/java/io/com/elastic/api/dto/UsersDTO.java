@@ -20,4 +20,12 @@ public class UsersDTO {
         instance.setEmail(this.getEmail());
         return instance;
     }
+
+    public static UsersDTO of(io.com.elastic.core.entity.Users users) {
+        UsersDTO instance = new UsersDTO();
+        instance.id = users.getId();
+        instance.name = users.getName();
+        instance.email = users.getEmail();
+        return instance;
+    }
 }

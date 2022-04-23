@@ -7,19 +7,18 @@ import io.com.elastic.api.event.BoardsModifyEvent;
 import io.com.elastic.api.repository.BoardsRepository;
 import io.com.elastic.api.repository.UsersRepository;
 import io.com.elastic.api.service.BoardsService;
-import io.com.elastic.api.service.UsersService;
-import io.com.elastic.core.service.BoardsIndexerService;
-import io.com.elastic.core.service.dto.common.DataChangeType;
-import io.com.elastic.core.service.dto.common.IndexingMessage;
-import io.com.elastic.core.service.dto.common.IndexingType;
+import io.com.elastic.api.utils.PageResponce;
+import io.com.elastic.core.client.searcher.BoardsSearcher;
+import io.com.elastic.core.client.searcher.dto.SearchApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,6 +26,7 @@ import java.util.Optional;
 public class BoardsServiceImpl implements BoardsService {
     private final BoardsRepository boardsRepository;
     private final UsersRepository usersRepository;
+    private final BoardsSearcher boardsSearcher;
     private final ApplicationEventPublisher publisher;
 
     @Override
@@ -38,8 +38,17 @@ public class BoardsServiceImpl implements BoardsService {
     }
 
     @Override
-    public List<BoardsDTO> getAll(String title, String comment) {
-        return boardsRepository.findAllByTitleAndComment(title, comment);
+    public PageResponce<List<BoardsDTO>> getAll(String title, String comment, Integer size, Integer page) {
+        SearchApiResponse<io.com.elastic.core.entity.Boards> response = boardsSearcher.findAllByTitleAndComment(title, comment, page, size);
+        List<BoardsDTO> result = response.getData().stream()
+                .map(b -> BoardsDTO.of(b))
+                .collect(Collectors.toList());
+
+        return (PageResponce<List<BoardsDTO>>) PageResponce.of((int) (response.getSize()/size)
+                , (int) response.getSize()
+                , page
+                , result
+        );
     }
 
     @Override

@@ -23,7 +23,17 @@ public class BoardsDTO {
         instance.setTitle(this.getTitle());
         instance.setComment(this.getComment());
         instance.setCreateDate(LocalDateTime.now());
+        return instance;
+    }
 
+    public static BoardsDTO of(io.com.elastic.core.entity.Boards boards) {
+        BoardsDTO instance = new BoardsDTO();
+        instance.id = boards.getId();
+        instance.title = boards.getTitle();
+        instance.comment = boards.getComment();
+        instance.createDate = boards.getCreateDate();
+        instance.modifyDate = boards.getModifyDate();
+        instance.users = UsersDTO.of(boards.getUsers());
         return instance;
     }
 }

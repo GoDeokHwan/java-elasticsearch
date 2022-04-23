@@ -2,7 +2,9 @@ package io.com.elastic.api.controller;
 
 import io.com.elastic.api.dto.BoardsDTO;
 import io.com.elastic.api.service.BoardsService;
+import io.com.elastic.api.utils.PageResponce;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +25,13 @@ public class BoardsController {
     }
 
     @GetMapping("")
-    public List<BoardsDTO> getAll(
+    public PageResponce<BoardsDTO> getAll(
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) String comment
+            @RequestParam(required = false) String comment,
+            @RequestParam(required = false, defaultValue = "20") Integer size,
+            @RequestParam(required = false, defaultValue = "1") Integer page
     ) {
-        return boardsService.getAll(title, comment);
+        return boardsService.getAll(title, comment, size, page);
     }
 
     @PatchMapping("/{id}")
