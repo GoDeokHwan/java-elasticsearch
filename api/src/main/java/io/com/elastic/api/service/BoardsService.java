@@ -1,13 +1,12 @@
 package io.com.elastic.api.service;
 
 import io.com.elastic.api.dto.BoardsDTO;
-
-import java.util.List;
+import io.com.elastic.api.utils.PageResponce;
 
 public interface BoardsService {
     void createBoards(BoardsDTO boards);
 
-    List<BoardsDTO> getAll(String title, String comment);
+    PageResponce getAll(String title, String comment, Integer size, Integer page);
 
     void modify(Long id, BoardsDTO request);
 
