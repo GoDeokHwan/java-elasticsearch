@@ -26,3 +26,91 @@ resources 밑에 mysql 폴더에 docker설정과 테이블 스키마 정보들�
 
 ## Elastic 설정
 resources 밑에 docker 폴더 쪽에는 PC에 설치하는 Docker 설정과 Index DDL 정보가 들어 있습니다.
+
+## Elastic 문법 
+1. Boolean Query 문법
+#### [ Elastic 문법 : SQL 문법 ]
+- must : and
+- should : or
+- match : Like
+- term : =
+- terms : in
+- range : 범위
+  - gte : <=
+  - lte : >=
+  - gt : <
+  - lt : >
+  
+ex.
+```bigquery
+GET boards/_search?
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "[컬럼]": "[조건값]"
+          }
+        }
+        , {
+            "range": {
+                "[컬럼]": {
+                    "gte": "2022-05-02"
+                    , "lte": "2022-05-12"
+                    , "format": "yyyy-mm-dd"
+                }
+            }
+        }
+      ]
+    }
+  }
+}
+```
+2. aggs Query 문법
+- date_histogram : 집계 범위 지정
+- aggs : 그룹 
+
+
+   ex.
+```bigquery
+GET boards/_search?
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "[컬럼]": "[조건값]"
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "[그룹명]": {
+        "date_histogram": {
+          "field": "createDate",
+          "interval": "week"
+        }
+    },
+    "aggs": {
+        "[그룹명]": {
+          "terms": {
+            "field": "taskTypeIds",
+            "size": 100, // 그룹에 종류 사이즈 
+            "missing": "0"  // 없으면 표시하는 값 
+          },
+          "aggs": {
+            "[그룹명]": {
+              "terms": {
+                "field": "incomingChannel",
+                "size": 10
+              }
+            }
+          }
+        }
+      }
+  }
+}
+```
